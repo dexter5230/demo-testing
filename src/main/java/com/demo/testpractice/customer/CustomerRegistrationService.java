@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerRegistrationService {
@@ -43,6 +44,13 @@ public class CustomerRegistrationService {
                 throw new IllegalStateException(String.format("The phone number [%s] has been taken by other customer already", phoneNumber));
             }
         }
+
+        // if the id of customer is null, generate the id for customer
+        if (request.getCustomer().getId() == null) {
+            request.getCustomer().setId(UUID.randomUUID());
+        }
+
+        //Save the customer to database
         customerRepository.save(request.getCustomer());
     }
 }
