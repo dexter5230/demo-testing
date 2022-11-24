@@ -1,5 +1,6 @@
 package com.demo.testpractice.customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 @Entity(name = "Customer")
 @Table(name = "customer", uniqueConstraints = @UniqueConstraint(name = "unique_phone_number_constrains", columnNames = "phone_number"))
-
+@JsonIgnoreProperties(value = "{id}", allowGetters = true)
 public class Customer {
 
     @Id
@@ -46,6 +47,18 @@ public class Customer {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
