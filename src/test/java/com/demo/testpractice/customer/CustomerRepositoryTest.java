@@ -4,13 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-@DataJpaTest
+@DataJpaTest(
+        properties = {"spring.jpa.properties.javax.persistence.validation.mode=none"}
+)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CustomerRepositoryTest {
     private final CustomerRepository underTest;
@@ -36,6 +40,16 @@ class CustomerRepositoryTest {
     }
 
     @Test
+    void itShouldNotSelectCustomerByPhoneNumberIfPhoneNumberIsNull() {
+        //Given
+        String phoneNumber = null;
+
+        //When
+        //Then
+        assertThat(underTest.selectCustomerByPhoneNumber(phoneNumber)).isNotPresent();
+    }
+
+    @Test
     void itShouldSaveCustomer() {
         //Given
         UUID id = UUID.randomUUID();
@@ -53,5 +67,16 @@ class CustomerRepositoryTest {
 //            assertThat(c.getName()).isEqualTo(customer.getName());
 //            assertThat(c.getPhoneNumber()).isEqualTo(customer.getPhoneNumber());
         });
+    }
+
+    @Test
+    void itShouldNotSaveCustomerWhenNameIsNull() {
+        //Given
+        Customer customer = new Customer(UUID.randomUUID(), null, "1234");
+        //When
+        //Then
+        assertThatThrownBy(()->underTest.save(customer))
+                .isInstanceOf(DataIntegrityViolationException.class)
+                .hasMessageContaining("not-null property references a null or transient value : com.demo.testpractice.customer.Customer.name");
     }
 }

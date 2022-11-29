@@ -142,4 +142,6 @@ class CustomerRegistrationServiceTest {
         Customer capturedCustomer = customerArgumentCaptor.getValue();
         assertThat(capturedCustomer).usingRecursiveComparison().ignoringActualNullFields().isEqualTo(customer);
     }
+
+
 }
