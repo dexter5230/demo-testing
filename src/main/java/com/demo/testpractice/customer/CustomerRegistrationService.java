@@ -1,5 +1,6 @@
 package com.demo.testpractice.customer;
 
+import com.demo.testpractice.utiles.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,12 @@ import java.util.UUID;
 public class CustomerRegistrationService {
 
     private final CustomerRepository customerRepository;
+    private final PhoneNumberValidator phoneNumberValidator;
 
     @Autowired
-    public CustomerRegistrationService(CustomerRepository customerRepository) {
+    public CustomerRegistrationService(CustomerRepository customerRepository, PhoneNumberValidator phoneNumberValidator) {
         this.customerRepository = customerRepository;
+        this.phoneNumberValidator = phoneNumberValidator;
     }
 
     @Transactional
@@ -27,7 +30,9 @@ public class CustomerRegistrationService {
         }
         // Get the phone number from the request
         String phoneNumber = request.getCustomer().getPhoneNumber();
-
+        if(!phoneNumberValidator.test(phoneNumber)) {
+            throw new IllegalStateException(String.format("Phone number [%s] is mot valid", phoneNumber));
+        }
         // if the number is null or length is zero, throw new IllegalStateException
         if (phoneNumber == null || phoneNumber.length() == 0) {
             throw new IllegalStateException("The phone number cannot be empty");

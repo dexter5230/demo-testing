@@ -16,7 +16,7 @@ public class PaymentService {
     private final List<Currency> SUPPORTED_CURRENCY = List.of(Currency.AUD, Currency.RMB);
 
     @Autowired
-    public PaymentService(CustomerRepository customerRepository, PaymentRepository paymentRepository, FakeCardPaymentCharger cardPaymentCharger) {
+    public PaymentService(CustomerRepository customerRepository, PaymentRepository paymentRepository, CardPaymentCharger cardPaymentCharger) {
         this.customerRepository = customerRepository;
         this.paymentRepository = paymentRepository;
         this.cardPaymentCharger = cardPaymentCharger;

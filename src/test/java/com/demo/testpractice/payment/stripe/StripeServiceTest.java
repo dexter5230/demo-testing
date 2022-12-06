@@ -1,4 +1,4 @@
-package com.demo.testpractice.stripe;
+package com.demo.testpractice.payment.stripe;
 
 import com.demo.testpractice.payment.CardPaymentCharge;
 import com.demo.testpractice.payment.Currency;
