@@ -1,4 +1,4 @@
-package com.demo.testpractice.stripe;
+package com.demo.testpractice.payment.stripe;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;

@@ -1,5 +1,6 @@
 package com.demo.testpractice.customer;
 
+import com.demo.testpractice.utiles.PhoneNumberValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -20,7 +21,8 @@ import static org.mockito.Mockito.never;
 class CustomerRegistrationServiceTest2 {
     @Mock
     private CustomerRepository customerRepository;
-
+    @Mock
+    private PhoneNumberValidator phoneNumberValidator;
     @Captor
     private ArgumentCaptor<Customer> customerArgumentCaptor;
 
@@ -30,7 +32,7 @@ class CustomerRegistrationServiceTest2 {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        underTest = new CustomerRegistrationService(customerRepository);
+        underTest = new CustomerRegistrationService(customerRepository, phoneNumberValidator);
     }
 
     @Test
@@ -43,6 +45,7 @@ class CustomerRegistrationServiceTest2 {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
 
         //When
+        given(phoneNumberValidator.test(phoneNumber)).willReturn(true);
         given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.empty());
         underTest.registerNewCustomer(request);
 
@@ -63,6 +66,7 @@ class CustomerRegistrationServiceTest2 {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
 
         //When
+        given(phoneNumberValidator.test(phoneNumber)).willReturn(true);
         given(customerRepository.selectCustomerByPhoneNumber(phoneNumber)).willReturn(Optional.of(existingCustomer));
 
         //Then
@@ -80,6 +84,7 @@ class CustomerRegistrationServiceTest2 {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(customer);
 
         //When
+        given(phoneNumberValidator.test(customer.getPhoneNumber())).willReturn(true);
         given(customerRepository.selectCustomerByPhoneNumber(customer.getPhoneNumber())).willReturn(Optional.of(customer));
         assertThatThrownBy(()->underTest.registerNewCustomer(request))
                 .isInstanceOf(IllegalStateException.class)

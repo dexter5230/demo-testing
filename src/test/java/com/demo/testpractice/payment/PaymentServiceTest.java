@@ -28,7 +28,7 @@ class PaymentServiceTest {
     @Mock
     private PaymentRepository paymentRepository;
     @Mock
-    private FakeCardPaymentCharger cardPaymentCharger;
+    private CardPaymentCharger cardPaymentCharger;
     @Captor
     private ArgumentCaptor<Payment> paymentCapture;
 
@@ -78,7 +78,7 @@ class PaymentServiceTest {
     }
 
     @Test
-    void itShouldNotSavePayementIfCardChargerFailed() {
+    void itShouldNotSavePaymentIfCardChargerFailed() {
         //Given
         Customer customer = new Customer(UUID.randomUUID(),"Jiaxuan", "000");
         Payment payment = new Payment(1L, customer, new BigDecimal("11.01"), Currency.AUD, "Card123","donation");

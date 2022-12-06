@@ -2,10 +2,13 @@ package com.demo.testpractice.customer;
 
 public class CustomerRegistrationRequest {
 
-    private final Customer customer;
+    private Customer customer;
 
     public CustomerRegistrationRequest(Customer customer) {
         this.customer = customer;
+    }
+
+    public CustomerRegistrationRequest() {
     }
 
     public Customer getCustomer() {

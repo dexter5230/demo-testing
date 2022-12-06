@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Entity(name = "Customer")
 @Table(name = "customer", uniqueConstraints = @UniqueConstraint(name = "unique_phone_number_constrains", columnNames = "phone_number"))
-@JsonIgnoreProperties(value = "{id}", allowGetters = true)
+@JsonIgnoreProperties(allowGetters = true)
 public class Customer {
 
     @Id
